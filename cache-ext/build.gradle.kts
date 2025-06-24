@@ -34,9 +34,9 @@ publishing {
             from(components["java"])
 
             pom {
-                name.set("so-16k-check") // 项目名称
+                name.set("build-cache-ext") // 项目名称
                 description.set("kotlin/java call process kit")
-                url.set("https://github.com/liushuixiaoxia/so-16k-check")
+                url.set("https://github.com/liushuixiaoxia/build-cache-ext")
 
                 licenses {
                     license {
@@ -54,9 +54,9 @@ publishing {
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/liushuixiaoxia/so-16k-check.git")
-                    developerConnection.set("scm:git:ssh://github.com/liushuixiaoxia/so-16k-check.git")
-                    url.set("https://github.com/liushuixiaoxia/so-16k-check")
+                    connection.set("scm:git:git://github.com/liushuixiaoxia/build-cache-ext.git")
+                    developerConnection.set("scm:git:ssh://github.com/liushuixiaoxia/build-cache-ext.git")
+                    url.set("https://github.com/liushuixiaoxia/build-cache-ext")
                 }
             }
         }

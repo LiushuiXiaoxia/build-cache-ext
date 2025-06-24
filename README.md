@@ -1,37 +1,36 @@
-# so-16k-check
+# build cache ext
 
 ---
 
-Android apk so 16k check gradle plugin.
+Gradle plugin for build cache extension.
 
-[![](https://jitpack.io/v/liushuixiaoxia/so-16k-check.svg)](https://jitpack.io/#liushuixiaoxia/so-16k-check)
+[![](https://jitpack.io/v/liushuixiaoxia/build-cache-ext.svg)](https://jitpack.io/#liushuixiaoxia/build-cache-ext)
 
 ```kotlin
-// build.gradle.kts
+// settings.gradle.kts
+
+pluginManagement {
+    repositories {
+        maven("https://jitpack.io")
+    }
+}
 
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        mavenCentral()
         maven { url = uri("https://jitpack.io") }
     }
 }
 
-// build.gradle.kts
-// android application project
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-
-    id("com.github.liushuixiaoxia.extcache")
+    id("com.github.liushuixiaoxia.extcache") version "$version" apply true
 }
 
-dependencies {
-    implementation("com.github.liushuixiaoxia:so-16k-check:${version}")
-}
-
-check16k {
-    enable.set(true) // default is true
-    // ignoreError.set(false) // default is true
+buildCache {
+    remote(com.github.liushuixiaoxia.extcache.ExtBuildCache::class.java) {
+        isEnabled = true
+        isPush = true
+        url = "http://localhost:8080/cache"
+    }
 }
 ```
