@@ -48,9 +48,9 @@ class ExtBuildCacheService(private val config: ExtBuildCache) : BuildCacheServic
             writer.writeTo(data)
             val wrapper = CacheWrapper(hash)
             wrapper.save(ByteArrayInputStream(data.toByteArray()))
-            logger.lifecycle("storeCache: key=$hash, data = ${data.size()} bytes")
+            logger.lifecycle("storeCache: key = $hash, data = ${data.size()} bytes")
         } else {
-            logger.quiet("storeCache: key=$hash, size = $size bytes, ignore")
+            logger.quiet("storeCache: key = $hash, size = $size bytes, ignore")
         }
     }
 
