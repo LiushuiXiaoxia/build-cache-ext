@@ -1,15 +1,15 @@
-package com.github.liushuixiaoxia.extcache.core
+package com.github.liushuixiaoxia.extcache.core.store
 
 import java.io.File
+import java.io.InputStream
 import java.nio.file.Paths
 
-class CacheEvent(
-    private val cacheBaseUrl: String,
+class CacheLocal(
     private val cacheBaseDir: String,
     private val key: String,
-) {
+) : CacheBase<InputStream> {
 
-    private val cacheFile: File by lazy {
+    val cacheFile: File by lazy {
         if (key.length > 2) {
             Paths.get(cacheBaseDir, key.substring(0, 2), key).toFile()
         } else {
@@ -17,32 +17,22 @@ class CacheEvent(
         }
     }
 
-    fun save(bytes: ByteArray) {
+    override fun save(s: InputStream) {
         cacheFile.parentFile.mkdirs()
-        cacheFile.writeBytes(bytes)
+        cacheFile.outputStream().buffered().use {
+            s.buffered().copyTo(it)
+        }
     }
 
-    fun exist(): Boolean {
-        return cacheFile.exists()
-    }
-
-    fun checkValid(): Boolean {
-        // todo check gzip
+    override fun exist(): Boolean {
         return cacheFile.exists() && cacheFile.isFile
     }
 
-    fun loadInputStream(): java.io.InputStream? {
+    override fun load(): InputStream? {
         return if (cacheFile.exists()) {
             cacheFile.inputStream().buffered()
         } else {
             null
         }
-    }
-
-    fun load(): ByteArray? {
-        if (cacheFile.exists()) {
-            return cacheFile.readBytes()
-        }
-        return null
     }
 }

@@ -1,24 +1,27 @@
 package com.github.liushuixiaoxia.extcache.core
 
+import com.github.liushuixiaoxia.extcache.CacheManager
 import com.github.liushuixiaoxia.extcache.ExtBuildCache
+import com.github.liushuixiaoxia.extcache.core.store.CacheWrapper
 import org.gradle.api.logging.Logging
 import org.gradle.caching.BuildCacheEntryReader
 import org.gradle.caching.BuildCacheEntryWriter
 import org.gradle.caching.BuildCacheKey
 import org.gradle.caching.BuildCacheService
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 
-class ExtBuildCacheService(val config: ExtBuildCache) : BuildCacheService {
+class ExtBuildCacheService(private val config: ExtBuildCache) : BuildCacheService {
 
     private val logger = Logging.getLogger(ExtBuildCacheService::class.java)
 
     override fun load(key: BuildCacheKey, reader: BuildCacheEntryReader): Boolean {
         val hash = key.hashCode
         var hilt = false
-        val cacheEvent = CacheEvent(config.url!!, CacheConfig.getCacheDir().absolutePath, hash)
-        if (cacheEvent.exist() && cacheEvent.checkValid()) {
+        val wrapper = CacheWrapper(hash)
+        if (wrapper.exist()) {
             val ret = kotlin.runCatching {
-                cacheEvent.loadInputStream()?.use { input ->
+                wrapper.load()?.use { input ->
                     reader.readFrom(input)
                 }
             }
@@ -43,8 +46,8 @@ class ExtBuildCacheService(val config: ExtBuildCache) : BuildCacheService {
         if (size > config.minSize && size < config.maxSize) {
             val data = ByteArrayOutputStream()
             writer.writeTo(data)
-            val cacheEvent = CacheEvent(config.url!!, CacheConfig.getCacheDir().absolutePath, hash)
-            cacheEvent.save(data.toByteArray())
+            val wrapper = CacheWrapper(hash)
+            wrapper.save(ByteArrayInputStream(data.toByteArray()))
             logger.lifecycle("storeCache: key=$hash, data = ${data.size()} bytes")
         } else {
             logger.quiet("storeCache: key=$hash, size = $size bytes, ignore")
@@ -52,6 +55,7 @@ class ExtBuildCacheService(val config: ExtBuildCache) : BuildCacheService {
     }
 
     override fun close() {
-        logger.quiet("Closing MyCustomBuildCacheService")
+        logger.quiet("Closing ExtBuildCacheService")
+        CacheManager.destroy()
     }
 }
