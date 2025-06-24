@@ -1,5 +1,7 @@
 package com.github.liushuixiaoxia.extcache
 
+import com.github.liushuixiaoxia.extcache.core.CacheCleanKit
+import com.github.liushuixiaoxia.extcache.core.CacheConfig
 import com.github.liushuixiaoxia.extcache.core.ExtBuildCacheService
 import org.gradle.api.logging.Logging
 import org.gradle.caching.BuildCacheService
@@ -13,9 +15,9 @@ abstract class ExtBuildCache : AbstractBuildCache() {
 
     var maxSize: Int = 1024 * 1024 * 1024 // 1G
 
-    var expiredDay: Long = 7 // days
+    var expiredDay: Int = 7 // days
 
-    var maxTotalSizeG = 20 // 10G
+    var maxTotalSizeG = 100 // 100G
 
     var url: String? = null
 
@@ -86,6 +88,13 @@ class ExtBuildCacheServiceFactory : BuildCacheServiceFactory<ExtBuildCache> {
     ): BuildCacheService {
         logger.quiet("Creating ext build cache with config: $config")
         config.checkValid()
+
+
+        logger.lifecycle("begin clean cache ...")
+        CacheCleanKit(CacheConfig.getCacheDir(), config.maxTotalSizeG * 1024 * 1024 * 1024L, config.expiredDay).apply {
+            clean()
+        }
+        logger.lifecycle("finish clean cache ...")
 
         return ExtBuildCacheService(config)
     }
