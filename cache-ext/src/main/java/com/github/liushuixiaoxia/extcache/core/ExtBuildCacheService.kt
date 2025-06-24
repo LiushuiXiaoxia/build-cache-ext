@@ -14,16 +14,41 @@ class ExtBuildCacheService(val config: ExtBuildCache) : BuildCacheService {
 
     override fun load(key: BuildCacheKey, reader: BuildCacheEntryReader): Boolean {
         val hash = key.hashCode
-        val ret = false
-        logger.quiet("loadCache: key=$hash, ret = $ret")
-        return ret
+        var hilt = false
+        val cacheEvent = CacheEvent(config.url!!, CacheConfig.getCacheDir().absolutePath, hash)
+        if (cacheEvent.exist() && cacheEvent.checkValid()) {
+            val ret = kotlin.runCatching {
+                cacheEvent.loadInputStream()?.use { input ->
+                    reader.readFrom(input)
+                }
+            }
+            if (ret.isSuccess) {
+                hilt = true
+            } else {
+                logger.quiet("loadCache: key=$hash, error = ${ret.exceptionOrNull()}")
+                hilt = false
+                if (!config.fallback404) {
+                    ret.getOrThrow()
+                }
+            }
+        }
+        logger.lifecycle("loadCache: key=$hash, hilt = $hilt")
+        return hilt
     }
 
     override fun store(key: BuildCacheKey, writer: BuildCacheEntryWriter) {
-        val data = ByteArrayOutputStream()
-        writer.writeTo(data)
+        val size = writer.size
         val hash = key.hashCode
-        logger.quiet("storeCache: key=$hash, data = ${data.size()} bytes")
+
+        if (size > config.minSize && size < config.maxSize) {
+            val data = ByteArrayOutputStream()
+            writer.writeTo(data)
+            val cacheEvent = CacheEvent(config.url!!, CacheConfig.getCacheDir().absolutePath, hash)
+            cacheEvent.save(data.toByteArray())
+            logger.lifecycle("storeCache: key=$hash, data = ${data.size()} bytes")
+        } else {
+            logger.quiet("storeCache: key=$hash, size = $size bytes, ignore")
+        }
     }
 
     override fun close() {
