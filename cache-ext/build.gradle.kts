@@ -17,8 +17,6 @@ kotlin {
 }
 
 dependencies {
-    compileOnly(libs.agpDev)
-    implementation(libs.processKit)
 }
 
 gradlePlugin {
@@ -38,7 +36,7 @@ publishing {
             pom {
                 name.set("so-16k-check") // 项目名称
                 description.set("kotlin/java call process kit")
-                url.set("https://github.com/LiushuiXiaoxia/so-16k-check")
+                url.set("https://github.com/liushuixiaoxia/so-16k-check")
 
                 licenses {
                     license {
@@ -49,16 +47,16 @@ publishing {
 
                 developers {
                     developer {
-                        id.set("LiushuiXiaoxia")
-                        name.set("LiushuiXiaoxia")
-                        url.set("https://github.com/LiushuiXiaoxia")
+                        id.set("liushuixiaoxia")
+                        name.set("liushuixiaoxia")
+                        url.set("https://github.com/liushuixiaoxia")
                     }
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/LiushuiXiaoxia/so-16k-check.git")
-                    developerConnection.set("scm:git:ssh://github.com/LiushuiXiaoxia/so-16k-check.git")
-                    url.set("https://github.com/LiushuiXiaoxia/so-16k-check")
+                    connection.set("scm:git:git://github.com/liushuixiaoxia/so-16k-check.git")
+                    developerConnection.set("scm:git:ssh://github.com/liushuixiaoxia/so-16k-check.git")
+                    url.set("https://github.com/liushuixiaoxia/so-16k-check")
                 }
             }
         }

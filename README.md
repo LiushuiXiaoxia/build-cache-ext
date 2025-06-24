@@ -4,7 +4,7 @@
 
 Android apk so 16k check gradle plugin.
 
-[![](https://jitpack.io/v/LiushuiXiaoxia/so-16k-check.svg)](https://jitpack.io/#LiushuiXiaoxia/so-16k-check)
+[![](https://jitpack.io/v/liushuixiaoxia/so-16k-check.svg)](https://jitpack.io/#liushuixiaoxia/so-16k-check)
 
 ```kotlin
 // build.gradle.kts
@@ -27,7 +27,7 @@ plugins {
 }
 
 dependencies {
-    implementation("com.github.LiushuiXiaoxia:so-16k-check:${version}")
+    implementation("com.github.liushuixiaoxia:so-16k-check:${version}")
 }
 
 check16k {
