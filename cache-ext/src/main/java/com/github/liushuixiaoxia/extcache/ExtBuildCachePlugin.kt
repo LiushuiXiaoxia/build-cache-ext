@@ -13,6 +13,6 @@ class ExtBuildCachePlugin : Plugin<Settings> {
             it.registerBuildCacheService(ExtBuildCache::class.java, ExtBuildCacheServiceFactory::class.java)
         }
 
-        logger.quiet("Apply CacheExtPlugin success")
+        logger.quiet("apply ext build cache plugin success ...")
     }
 }
