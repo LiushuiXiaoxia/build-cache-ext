@@ -28,14 +28,14 @@ class ExtBuildCacheService(private val config: ExtBuildCache) : BuildCacheServic
             if (ret.isSuccess) {
                 hilt = true
             } else {
-                logger.quiet("loadCache: key=$hash, error = ${ret.exceptionOrNull()}")
+                logger.quiet("loadCache: key = $hash, error = ${ret.exceptionOrNull()}")
                 hilt = false
                 if (!config.fallback404) {
                     ret.getOrThrow()
                 }
             }
         }
-        logger.lifecycle("loadCache: key=$hash, hilt = $hilt")
+        logger.lifecycle("loadCache: key = $hash, hilt = $hilt")
         return hilt
     }
 

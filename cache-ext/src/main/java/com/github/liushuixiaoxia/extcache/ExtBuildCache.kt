@@ -22,9 +22,9 @@ abstract class ExtBuildCache : AbstractBuildCache() {
 
     var timeout: Long = 10
 
-    var retryCount: Int = 2
-
     var fallback404: Boolean = true
+
+    var retryCount: Int = 2
 
     var logDetail: Boolean = false
 

@@ -29,7 +29,7 @@ class CacheRemote(
     }
 
     private val url: String by lazy {
-        "$baseUrl/$key"
+        "$baseUrl$key"
     }
 
     override fun exist(): Boolean {
@@ -58,13 +58,15 @@ class CacheRemote(
                 .url(url)
                 .get()
                 .build()
-            val response = client.newCall(request).execute()
-            if (response.isSuccessful) {
-                file.outputStream().buffered().use {
-                    response.body?.byteStream()?.copyTo(it)
+            client.newCall(request).execute().use { response ->
+                if (response.isSuccessful) {
+                    file.outputStream().buffered().use {
+                        response.body?.byteStream()?.copyTo(it)
+                    }
+                } else {
+                    logger.lifecycle("Error loading cache from $url: ${response.message}")
                 }
             }
-            response.close()
         }.onFailure {
             logger.lifecycle("Error loading cache from $url: ${it.message}")
         }
@@ -79,10 +81,13 @@ class CacheRemote(
         kotlin.runCatching {
             val request = okhttp3.Request.Builder()
                 .url(url)
-                .post(s.asRequestBody(null))
+                .put(s.asRequestBody(null))
                 .build()
-            val response = client.newCall(request).execute()
-            response.close()
+            client.newCall(request).execute().use {
+                if (!it.isSuccessful) {
+                    logger.lifecycle("Error saving cache to $url: ${it.message}")
+                }
+            }
         }.onFailure {
             logger.lifecycle("Error saving cache to $url: ${it.message}")
         }
