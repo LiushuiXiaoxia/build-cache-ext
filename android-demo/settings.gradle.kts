@@ -38,6 +38,7 @@ buildCache {
         isEnabled = true
         isPush = true
         url = "http://localhost:22333/gradle-cache/"
+        logDetail = true
     }
 }
 

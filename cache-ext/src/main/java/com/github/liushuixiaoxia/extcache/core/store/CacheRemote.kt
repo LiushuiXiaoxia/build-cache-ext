@@ -1,9 +1,9 @@
 package com.github.liushuixiaoxia.extcache.core.store
 
 import com.github.liushuixiaoxia.extcache.CacheManager
+import com.github.liushuixiaoxia.extcache.logWarn
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.asRequestBody
-import org.gradle.api.logging.Logging
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -13,8 +13,6 @@ class CacheRemote(
     private val file: File,
     private val fallback404: Boolean,
 ) : CacheBase<File> {
-
-    private val logger = Logging.getLogger(CacheRemote::class.java)
 
     companion object {
         private val client: OkHttpClient by lazy {
@@ -42,7 +40,7 @@ class CacheRemote(
             response.close()
             response.isSuccessful
         }.onFailure {
-            logger.lifecycle("Error checking existence of cache at $url: ${it.message}")
+            logWarn("Error checking existence of cache at $url: ${it.message}")
         }
 
         return if (fallback404) {
@@ -64,11 +62,11 @@ class CacheRemote(
                         response.body?.byteStream()?.copyTo(it)
                     }
                 } else {
-                    logger.lifecycle("Error loading cache from $url: ${response.message}")
+                    logWarn("Error loading cache from $url: ${response.message}")
                 }
             }
         }.onFailure {
-            logger.lifecycle("Error loading cache from $url: ${it.message}")
+            logWarn("Error loading cache from $url: ${it.message}")
         }
 
         if (file.exists()) {
@@ -85,11 +83,11 @@ class CacheRemote(
                 .build()
             client.newCall(request).execute().use {
                 if (!it.isSuccessful) {
-                    logger.lifecycle("Error saving cache to $url: ${it.message}")
+                    logWarn("Error saving cache to $url: ${it.message}")
                 }
             }
         }.onFailure {
-            logger.lifecycle("Error saving cache to $url: ${it.message}")
+            logWarn("Error saving cache to $url: ${it.message}")
         }
     }
 }

@@ -26,7 +26,7 @@ abstract class ExtBuildCache : AbstractBuildCache() {
 
     var retryCount: Int = 2
 
-    var logDetail: Boolean = false
+    var logDetail: Boolean = true
 
     fun checkValid(): Boolean {
         // common config
@@ -80,21 +80,20 @@ abstract class ExtBuildCache : AbstractBuildCache() {
 
 class ExtBuildCacheServiceFactory : BuildCacheServiceFactory<ExtBuildCache> {
 
-    private val logger = Logging.getLogger(ExtBuildCacheServiceFactory::class.java)
     override fun createBuildCacheService(
         config: ExtBuildCache,
         describer: BuildCacheServiceFactory.Describer,
     ): BuildCacheService {
-        logger.quiet("Creating ext build cache with config: $config")
+        Logging.getLogger(ExtBuildCacheServiceFactory::class.java).quiet("Creating ext build cache with config: $config")
         config.checkValid()
 
         CacheManager.setupConfig(config)
 
-        logger.lifecycle("begin clean cache ...")
+        logQuiet("begin clean cache ...")
         CacheCleanKit(CacheManager.getCacheDir(), config.maxTotalSizeG * 1024 * 1024 * 1024L, config.expiredDay).apply {
             clean()
         }
-        logger.lifecycle("finish clean cache ...")
+        logQuiet("finish clean cache ...")
 
         return ExtBuildCacheService(config)
     }
