@@ -24,8 +24,8 @@ dependencies {
 gradlePlugin {
     plugins {
         create("cacheext") {
-            id = "com.github.liushuixiaoxia.cacheext"
-            implementationClass = "com.github.liushuixiaoxia.cacheext.CacheExtPlugin"
+            id = "com.github.liushuixiaoxia.extcache"
+            implementationClass = "com.github.liushuixiaoxia.extcache.ExtBuildCachePlugin"
         }
     }
 }

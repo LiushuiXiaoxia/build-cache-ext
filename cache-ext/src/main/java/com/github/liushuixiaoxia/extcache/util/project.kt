@@ -1,4 +1,4 @@
-package com.github.liushuixiaoxia.cacheext.util
+package com.github.liushuixiaoxia.extcache.util
 
 import org.gradle.api.Project
 
