@@ -17,6 +17,15 @@ kotlin {
 }
 
 dependencies {
+    // OkHttp 核心库
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    // OkHttp 日志拦截器（可选）
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    // Kotlin 协程核心库
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+    // 协程与 JVM 的支持（如调度器等）
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.8.1")
 }
 
 gradlePlugin {
