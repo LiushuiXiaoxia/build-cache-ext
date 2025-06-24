@@ -29,10 +29,15 @@ plugins {
 }
 
 buildCache {
+    // for test
+    local {
+        isEnabled = false
+        isPush = false
+    }
     remote(com.github.liushuixiaoxia.extcache.ExtBuildCache::class.java) {
         isEnabled = true
         isPush = true
-        url = "http://localhost:8080/cache"
+        url = "http://localhost:22333/gradle-cache/"
     }
 }
 
