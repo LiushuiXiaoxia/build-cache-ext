@@ -14,9 +14,6 @@ object CacheManager {
 
     lateinit var extBuildCache: ExtBuildCache
 
-    val pool: ExecutorService by lazy {
-        Executors.newCachedThreadPool()
-    }
 
     fun setup(gradle: Gradle) {
         CacheManager.gradle = gradle
@@ -42,8 +39,13 @@ object CacheManager {
         }
     }
 
+    val pool: ExecutorService by lazy {
+        val count = Runtime.getRuntime().availableProcessors() / 2
+        Executors.newFixedThreadPool(count.coerceAtLeast(4))
+    }
+
     fun destroy() {
-        pool.shutdown()
+        // pool.shutdown()
     }
 }
 

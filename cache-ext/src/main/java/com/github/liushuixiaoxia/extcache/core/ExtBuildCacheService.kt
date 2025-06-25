@@ -4,6 +4,7 @@ import com.github.liushuixiaoxia.extcache.CacheManager
 import com.github.liushuixiaoxia.extcache.ExtBuildCache
 import com.github.liushuixiaoxia.extcache.core.store.CacheWrapper
 import com.github.liushuixiaoxia.extcache.logDetail
+import com.github.liushuixiaoxia.extcache.logError
 import com.github.liushuixiaoxia.extcache.logQuiet
 import com.github.liushuixiaoxia.extcache.logWarn
 import org.gradle.api.logging.Logging
@@ -25,6 +26,11 @@ class ExtBuildCacheService(private val config: ExtBuildCache) : BuildCacheServic
                 wrapper.load()?.use { input ->
                     reader.readFrom(input)
                 }
+            }.onFailure {
+                logError("loadCache: key = $hash, error = ${it.message}")
+                if (config.logDetail) {
+                    it.printStackTrace()
+                }
             }
             if (ret.isSuccess) {
                 hilt = true
@@ -45,11 +51,18 @@ class ExtBuildCacheService(private val config: ExtBuildCache) : BuildCacheServic
         val hash = key.hashCode
 
         if (size > config.minSize && size < config.maxSize) {
-            val data = ByteArrayOutputStream()
-            writer.writeTo(data)
-            val wrapper = CacheWrapper(hash)
-            wrapper.save(ByteArrayInputStream(data.toByteArray()))
-            logDetail("storeCache: key = $hash, data = ${data.size()} bytes")
+            kotlin.runCatching {
+                val data = ByteArrayOutputStream()
+                writer.writeTo(data)
+                val wrapper = CacheWrapper(hash)
+                wrapper.save(ByteArrayInputStream(data.toByteArray()))
+                logDetail("storeCache: key = $hash, data = ${data.size()} bytes")
+            }.onFailure {
+                logError("storeCache: key = $hash, error = ${it.message}")
+                if (config.logDetail) {
+                    it.printStackTrace()
+                }
+            }
         } else {
             logWarn("storeCache: key = $hash, size = $size bytes, ignore")
         }

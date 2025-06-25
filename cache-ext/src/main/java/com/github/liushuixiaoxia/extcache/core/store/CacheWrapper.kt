@@ -35,8 +35,8 @@ class CacheWrapper(
     }
 
     override fun save(s: InputStream) {
+        local.save(s)
         CacheManager.pool.submit {
-            local.save(s)
             remote?.save(local.cacheFile)
         }
     }

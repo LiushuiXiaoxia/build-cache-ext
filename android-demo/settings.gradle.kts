@@ -24,7 +24,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("com.github.liushuixiaoxia.extcache") version "0.0.1" apply true
+    id("com.github.liushuixiaoxia.extcache") version "0.0.2" apply true
 //    id("com.github.liushuixiaoxia.extcache") apply true
 }
 
