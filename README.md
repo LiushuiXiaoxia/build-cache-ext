@@ -64,3 +64,33 @@ buildCache {
     }
 }
 ```
+
+```groovy
+// settings.gradle
+buildscript {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+    dependencies {
+        classpath 'com.github.liushuixiaoxia:build-cache-ext:$version'
+    }
+}
+
+apply plugin: "com.github.liushuixiaoxia.extcache"
+
+buildCache {
+    local {
+        enabled = false
+    }
+    remote(com.github.liushuixiaoxia.extcache.ExtBuildCache) {
+        enabled = true
+        push = true
+        
+        // 相关配置参照 gradle kts 用法
+        timeout = 10
+        fallback404 = true
+        cacheUrl = "http://localhost:22333/gradle-cache/"
+    }
+}
+
+```
