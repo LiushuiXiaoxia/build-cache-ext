@@ -7,7 +7,7 @@ import java.io.File
 
 class CacheCleanKit(
     private val cacheRoot: File,
-    private val totalSize: Long,
+    private val totalSize: Int,
     private val expiredDay: Int,
 ) {
 
@@ -25,7 +25,7 @@ class CacheCleanKit(
             }
         }
 
-        val total = cacheRoot.walkBottomUp().filter { it.isFile }.sumOf { it.length() }
+        val total = cacheRoot.walkBottomUp().filter { it.isFile }.sumOf { it.length() } / 1024 / 1024 / 1024
 
         if (total > totalSize) {
             logQuiet("local cache size is $total, which exceeds the limit of $totalSize, cleaning up ...")

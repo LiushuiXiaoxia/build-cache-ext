@@ -90,7 +90,7 @@ class ExtBuildCacheServiceFactory : BuildCacheServiceFactory<ExtBuildCache> {
         CacheManager.setupConfig(config)
 
         logQuiet("begin clean cache ...")
-        CacheCleanKit(CacheManager.getCacheDir(), config.maxTotalSizeG * 1024 * 1024 * 1024L, config.expiredDay).apply {
+        CacheCleanKit(CacheManager.getCacheDir(), config.maxTotalSizeG, config.expiredDay).apply {
             clean()
         }
         logQuiet("finish clean cache ...")
