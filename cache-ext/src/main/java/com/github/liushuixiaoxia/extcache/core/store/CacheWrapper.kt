@@ -7,7 +7,7 @@ class CacheWrapper(
     private val key: String,
     private val fallback404: Boolean = CacheManager.extBuildCache.fallback404,
     private val cacheBaseDir: String = CacheManager.getCacheDir().absolutePath,
-    private val cacheBaseUrl: String? = CacheManager.extBuildCache.url,
+    private val cacheBaseUrl: String? = CacheManager.extBuildCache.cacheUrl,
 ) : CacheBase<InputStream> {
 
 

@@ -18,8 +18,20 @@ object CacheManager {
         Executors.newCachedThreadPool()
     }
 
+    fun setup(gradle: Gradle) {
+        CacheManager.gradle = gradle
+    }
+
+    fun setupConfig(config: ExtBuildCache) {
+        extBuildCache = config
+    }
+
     private fun getExtRootDir(): File {
-        return File(gradle.gradleUserHomeDir, "cache-ext").absoluteFile.apply {
+        var rootDir = gradle.gradleUserHomeDir
+        if (!extBuildCache.cacheDir.isNullOrBlank()) {
+            rootDir = File(extBuildCache.cacheDir!!).absoluteFile
+        }
+        return File(rootDir, "cache-ext").absoluteFile.apply {
             mkdirs()
         }
     }
@@ -28,14 +40,6 @@ object CacheManager {
         return File(getExtRootDir(), "cache").absoluteFile.apply {
             mkdirs()
         }
-    }
-
-    fun setup(gradle: Gradle) {
-        CacheManager.gradle = gradle
-    }
-
-    fun setupConfig(config: ExtBuildCache) {
-        extBuildCache = config
     }
 
     fun destroy() {

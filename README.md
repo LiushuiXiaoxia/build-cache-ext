@@ -46,14 +46,15 @@ buildCache {
         isEnabled = true // 开启缓存
         isPush = true // 推送缓存
 
-        // 本地缓存配置
+        // 本地缓存配置 
+        // cacheDir = "" // 缓存路径, 默认为 ~/.gradle/cache-ext/cache
         // minSize = 0 // 缓存最小大小，默认为0
         // maxSize = 0 // 缓存最大大小，默认为1G
         // expiredDay = 7 //  本地缓存过期时间，单位为天，默认为7天
         // maxTotalSizeG = 100 // 缓存最大总大小，单位为G，默认为100G，按天清理，超过100G的缓存会清理全部
 
         // 远程缓存配置
-        url = "http://localhost:22333/gradle-cache/" // 设置缓存地址, 请替换为实际地址，不设置则不使用远程缓存
+        cacheUrl = "http://localhost:22333/gradle-cache/" // 设置缓存地址, 请替换为实际地址，不设置则不使用远程缓存
         // timeout = 10 // 设置缓存请求超时时间，单位为秒，默认为10秒 
         fallback404 = true // 设置当远程服务请求失败，降级为404，防止异常导致后续无法使用缓存
         retryCount = 2 // 设置请求失败重试次数，默认为2次

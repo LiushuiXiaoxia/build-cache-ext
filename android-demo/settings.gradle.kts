@@ -37,7 +37,7 @@ buildCache {
     remote(com.github.liushuixiaoxia.extcache.ExtBuildCache::class.java) {
         isEnabled = true
         isPush = true
-        url = "http://localhost:22333/gradle-cache/"
+        cacheUrl = "http://localhost:22333/gradle-cache/"
         logDetail = true
     }
 }

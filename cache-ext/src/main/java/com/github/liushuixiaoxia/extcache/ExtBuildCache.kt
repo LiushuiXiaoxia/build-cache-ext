@@ -14,11 +14,13 @@ abstract class ExtBuildCache : AbstractBuildCache() {
 
     var maxSize: Int = 1024 * 1024 * 1024 // 1G
 
+    var cacheDir: String? = null
+
     var expiredDay: Int = 7 // days
 
     var maxTotalSizeG = 100 // 100G
 
-    var url: String? = null
+    var cacheUrl: String? = null
 
     var timeout: Long = 10
 
@@ -49,11 +51,11 @@ abstract class ExtBuildCache : AbstractBuildCache() {
         }
 
         // remote cache config
-        if (!url.isNullOrBlank()) {
-            if (!url!!.startsWith("http://") && !url!!.startsWith("https://")) {
+        if (!cacheUrl.isNullOrBlank()) {
+            if (!cacheUrl!!.startsWith("http://") && !cacheUrl!!.startsWith("https://")) {
                 throw IllegalArgumentException("Url must start with http:// or https://")
             }
-            if (!url!!.endsWith("/")) {
+            if (!cacheUrl!!.endsWith("/")) {
                 throw IllegalArgumentException("Url must end with /")
             }
 

@@ -28,10 +28,10 @@ class CacheCleanKit(
         val total = cacheRoot.walkBottomUp().filter { it.isFile }.sumOf { it.length() } / 1024 / 1024 / 1024
 
         if (total > totalSize) {
-            logQuiet("local cache size is $total, which exceeds the limit of $totalSize, cleaning up ...")
+            logQuiet("local cache size is ${total}G, which exceeds the limit of ${totalSize}G, cleaning up ...")
             cacheRoot.deleteRecursively()
         } else {
-            logDetail("local cache size is $total, which is within the limit of $totalSize, no need to clean up.")
+            logDetail("local cache size is ${total}G, which is within the limit of ${totalSize}G, no need to clean up.")
         }
     }
 }
